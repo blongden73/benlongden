@@ -178,6 +178,8 @@ img.display {
 
     ul {
       list-style: none;
+      padding-left: 0;
+      margin-right: 20px;
 
       .title {
         margin-bottom: 20px;
@@ -226,7 +228,7 @@ img.display {
   }
 
   .right {
-    width: max-content;
+    width: max-content !important;
 
     @include mq($from: desktop) {
       align-self: center;
@@ -311,6 +313,15 @@ img.display {
   }
 }
 
+.flex-top .flex-menu {
+  .right
+  {
+    @include mq($from: desktop) {
+      width: 44% !important;
+    }
+  }
+}
+
 .name path {
   transform: translateY(50px);
   transform-origin: center;
@@ -372,7 +383,7 @@ img.display {
   margin-bottom: 20px;
 
   @include mq($from: desktop) {
-    width: 49%;
+    width: 46% !important;
     margin-right: 3%;
     height: 46vw;
     margin-bottom: 0;
@@ -384,7 +395,7 @@ img.display {
   width: 100% !important;
 
   @include mq($from: desktop) {
-    width: 49%;
+    width: 46% !important;
     margin-right: 1%;
   }
 }
