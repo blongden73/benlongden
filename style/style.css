@@ -98,6 +98,15 @@ a {
 img.display {
   display:block;
 } */
+.flex.project-title.editorial h1, .flex.project-title.editorial p {
+  color: #fff;
+}
+@media all and (min-width: 61.25em) {
+  .flex.project-title.editorial {
+    margin-top: 20vh;
+  }
+}
+
 .click-area {
   position: absolute;
   top: 0;

@@ -114,6 +114,15 @@ img.display {
   display:block;
 } */
 
+.flex.project-title.editorial {
+  h1, p {
+    color: #fff;
+  }
+  @include mq($from: desktop) {
+    margin-top: 20vh;
+  }
+}
+
 .click-area {
   position:absolute;
   top:0;
