@@ -652,11 +652,18 @@ $duration: 60s;
 
 .case-floating-image {
   position: absolute;
-  top: 0;
+  top: 76vh;
   bottom: 0;
   right: 0;
-  width: 50%;
+  width: 100%;
   z-index: 0;
+
+  @include mq($from: desktop) {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+  }
 
   img {
     width: 100%;

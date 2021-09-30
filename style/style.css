@@ -604,11 +604,19 @@ video.lazy {
 
 .case-floating-image {
   position: absolute;
-  top: 0;
+  top: 76vh;
   bottom: 0;
   right: 0;
-  width: 50%;
+  width: 100%;
   z-index: 0;
+}
+@media all and (min-width: 61.25em) {
+  .case-floating-image {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+  }
 }
 .case-floating-image img {
   width: 100%;
