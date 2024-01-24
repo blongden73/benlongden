@@ -279,8 +279,13 @@ img.display {
 .flex.project-title h1 {
   position: relative;
   font-family: "swis721_btroman";
-  font-size: 50px;
+  font-size: 30px;
   font-weight: 200;
+}
+@media all and (min-width: 61.25em) {
+  .flex.project-title h1 {
+    font-size: 30px;
+  }
 }
 .flex.project-title.white h1 {
   color: white;
