@@ -303,14 +303,23 @@ img.display {
 
   h1 {
     position: relative;
-    font-family: 'Canela';
+    font-family: 'swis721_btroman';
     font-size: 50px;
     font-weight: 200;
+  }
+
+  &.white {
+    h1 {
+      color: white;
+    }
+    .sub {
+      opacity: 0.2;
+    }
   }
 }
 
 .flex-top {
-  height: 100vh;
+  height: 105vh;
   background-color: #000;
   width: 100%;
   margin-left: 0 !important;
@@ -554,6 +563,7 @@ img.display {
 .dots {
   display: flex;
   padding-top: 10px;
+
   .dot {
     background-color: black;
     opacity: 0.3;
@@ -565,6 +575,12 @@ img.display {
 
     &.display {
       opacity: 1;
+    }
+  }
+
+  &.white {
+    .dot {
+      background-color: #fff;
     }
   }
 }
@@ -671,4 +687,8 @@ $duration: 60s;
     object-fit: cover;
     object-position: center;
   }
+}
+
+.full-black {
+  background-color: #000;
 }

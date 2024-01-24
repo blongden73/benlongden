@@ -42,6 +42,7 @@ function lazy(){
   var screenHeight = window.innerHeight / 1.5;
   var belowFold = window.innerHeight * 2;
   console.log(lazy);
+  if(lazy.length >= 1) {
   if(!lazy[0].classList.contains('video')) {
     var src1 = lazy[0].dataset.src;
   }
@@ -86,6 +87,7 @@ function lazy(){
       }
     }
   })
+}
 }lazy();
 
 function about() {
