@@ -1,298 +1,1078 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Ben Longden Design</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="style/style.css">
-<link rel="apple-touch-icon" sizes="57x57" href="assets/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="assets/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="assets/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="assets/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="assets/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="assets/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="assets/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="assets/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="assets/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
-<link rel="manifest" href="assets/manifest.json">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="assets/ms-icon-144x144.png">
-<meta name="theme-color" content="#ffffff">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ben Longden - Creative Direction - Design </title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --letter-color: #a0a0a0;
+            --hover-color: #cccccc;
+            --font-stack: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-stack);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.4;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden; /* Prevent body scroll on desktop, handle scrolling in columns */
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        header {
+          padding: 20px 40px;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 100;
+        }
+
+        /* 1. Sidebar List */
+        .sidebar {
+            width: 680px;
+            padding: 80px 20px 40px 40px; /* Top padding clears the fixed header */
+            flex-shrink: 0;
+            z-index: 10;
+            overflow-y: auto;
+            height: 100%;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .sidebar::-webkit-scrollbar { 
+            display: none; 
+        }
+
+        .list-group {
+            display: flex;
+            margin-bottom: 4px;
+            border-top: 1px solid #333;
+            margin-top: 40px;
+        }
+
+        .letter {
+            width: 160px;
+            color: var(--letter-color);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            padding-top: 2px;
+        }
+
+        .clients {
+            flex: 1;
+            list-style: none;
+        }
+
+        /* Grid List Items for perfect columns */
+        .client-item {
+            cursor: pointer;
+            color: var(--letter-color);
+            transition: color 0.2s ease;
+            margin-bottom: 6px;
+            display: grid;
+            grid-template-columns: 1fr 60px 120px; /* Name, Year, Role widths */
+            gap: 0 30px;
+            align-items: baseline;
+        }
+
+        .client-item:hover, .client-item.active-item {
+            color: var(--text-color);
+        }
+
+        .client-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .client-year { text-align: right; }
+        .client-role { text-align: left; }
+
+        /* ---------------------------------------
+           DESKTOP STAGE (Right Column) 
+           --------------------------------------- */
+        .center-stage {
+            flex-grow: 1;
+            position: relative;
+            height: 100%;
+            overflow: hidden; /* Hide overflow to keep close button locked */
+            background-color: var(--bg-color);
+        }
+
+        /* Scroll area isolated inside the stage so close button never scrolls away */
+        .scroll-area {
+            height: 100%;
+            width: 100%;
+            overflow-y: auto;
+            padding: 40px 80px;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+        }
+
+        .center-stage.is-active .scroll-area {
+            align-items: flex-start; /* Move content to top when clicked */
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(15, 15, 15, 0.8);
+            border-radius: 50%;
+            padding: 8px;
+            border: none;
+            color: var(--letter-color);
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, color 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: var(--text-color);
+            background: rgba(30, 30, 30, 0.9);
+        }
+
+        .center-stage.is-active .close-btn {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin: auto; 
+        }
+
+        .description-grid {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.6s cubic-bezier(0.25, 1, 0.5, 1), margin 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .description-grid.active {
+            grid-template-rows: 1fr;
+            margin-bottom: 40px;
+            opacity: 1;
+        }
+
+        .description-panel {
+            overflow: hidden; 
+            width: 100%;
+            max-width: 700px; 
+        }
+
+        .desc-title {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            margin-top: 0px;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .desc-body {
+            font-size: 0.95rem;
+            color: #a0a0a0;
+            line-height: 1.6;
+            padding-bottom: 10px; 
+        }
+
+        .image-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; 
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .center-stage:not(.is-active) .image-wrapper {
+            align-items: center; /* Center on hover mode */
+        }
+
+        .image-wrapper img,
+        .image-wrapper video {
+            max-width: 100%;
+            max-height: calc(100vh - 150px); 
+            object-fit: contain;
+            user-select: none;
+            transition: max-height 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .center-stage.is-active .image-wrapper img,
+        .center-stage.is-active .image-wrapper video {
+            max-height: calc(100vh - 350px); 
+        }
+
+        .preview-caption {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: var(--letter-color);
+        }
+
+        .center-stage.is-active .preview-caption {
+            display: none; 
+        }
+
+        .carousel-controls {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; 
+            display: flex;
+            opacity: 0;
+            pointer-events: none; 
+        }
+
+        .image-wrapper.is-carousel .carousel-controls { pointer-events: auto; }
+
+        .carousel-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>') 16 16, auto;
+        }
+
+        .carousel-btn.next {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>') 16 16, auto;
+        }
+
+        .carousel-indicators {
+            display: none;
+            justify-content: center;
+            align-self: center; 
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .image-wrapper.is-carousel .carousel-indicators { display: flex; }
+
+        .dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #444; transition: background 0.2s;
+        }
+        
+        .dot.active { background: #fff; }
+
+
+        /* ---------------------------------------
+           MOBILE ACCORDION SPECIFIC
+           --------------------------------------- */
+        .mobile-accordion-wrapper {
+            grid-column: 1 / -1; /* Spans across all name/year/role columns */
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .mobile-accordion-wrapper.open {
+            grid-template-rows: 1fr;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-accordion-content {
+            min-height: 0; /* Needed for grid height animation */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-top: 0;
+            padding-bottom: 0;
+            transition: padding 0.4s ease;
+        }
+
+        .mobile-accordion-wrapper.open .mobile-accordion-content {
+            padding-top: 15px;
+            padding-bottom: 30px;
+        }
+
+        .mobile-desc {
+            font-size: 0.95rem;
+            color: #a0a0a0;
+            line-height: 1.6;
+        }
+
+        .mobile-accordion-content img,
+        .mobile-accordion-content video {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            display: block;
+        }
+
+
+        /* ---------------------------------------
+           MOBILE RESPONSIVE BREAKPOINT
+           --------------------------------------- */
+        @media (max-width: 1024px) {
+            body { 
+                overflow-y: auto; /* Re-enable vertical scroll natively */
+                overflow-x: hidden;
+            }
+            .container { 
+                flex-direction: column; 
+                display: block; 
+                height: auto; 
+                min-height: 100vh;
+            }
+            header { 
+                background: rgba(0,0,0,0.9); 
+                backdrop-filter: blur(5px); 
+            }
+            .sidebar { 
+                width: 100%; 
+                height: auto; 
+                overflow: visible; 
+                padding: 100px 20px 40px 20px; 
+            }
+            .center-stage { 
+                display: none !important; /* Hide desktop presentation logic completely */
+            }
+            .list-group {
+                flex-direction: column;
+            }
+            .letter {
+                width: 100%;
+                margin-bottom: 15px;
+                font-size: 0.75rem;
+            }
+            .client-item {
+                grid-template-columns: 1fr 45px 75px;
+                gap: 10px;
+                font-size: 0.9rem;
+                margin-bottom: 15px; /* bigger tap targets */
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="page-wrapper full-black">
-  <!-- <div class="click-area"></div>
-  <h1>Ben Longden Design</h1>
-  <h2>Design Director</h2>
-  <h3>The Guardian</h3>
-  <img src="assets/aw1.jpg">
-  <img src="assets/daily1.jpg">
-  <img src="assets/des5.jpg">
-  <img src="assets/gm2.jpg">
-  <img src="assets/tif2.jpg">
-  <img src="assets/trig5.jpg">
-  <h4>projects@benlongdendesign.co.uk</h4> -->
-  <div class="flex-top">
-    <div class="flex-menu">
-      <div class="left">
-        <div class="">
-          <span class="about-menu"><span class="dot">•</span> About</span>
-        </div>
-      </div>
-      <!-- <div class="right">
-        <h1>Freelance Design & Creative Director</h1>
-        <h1>Prev Head of Brand Design at Cord — Prev Digital Design Director at The Guardian</h1>
-      </div> -->
-    </div>
-    <div class="about-me">
-      <div class="flex-about">
-        <div class="left">
-          <p>Design director, strategist and creative coder with more than 13 years
-  experience working across branding and editorial design for digital
-  and print. I have a passion for creating brands, which are both
-  beautiful and impactful. Fundamentally I am a creative thinker and
-  maker, I work from strategy to execution.</p>
-    <p>For me, design is a way of thinking and l always push the idea
-  first. I currently direct a team of designers and developers, taught
-  design at Shillington College for more than 2 years, acted as a
-  consultant for multiple branding projects, have given talks and lectures
-  most recently with Its Nice That and Nottingham design festival. I also
-  worked as a mentor, judge and advisor for Design Week, Design
-  Bridge Awards, among others.</p>
-    <p>My work has been featured in It’s Nice That, Lecture in Progress,
-  Baseline, SiteInspire and Httpster. Aswell as being part ofthe most
-  awarded design team at D&AD and Design Week awards.</p>
-  <p>If you would like to contact me regarding a project, talk or collaboration please email me ↝	<a href="mailto:projects@benlongdendesign.co.uk">projects@benlongdendesign.co.uk</a></p>
-        </div>
-        <div class="right">
-          <ul>
-            <li class="title">Expertise</li>
+    <header><div class="logo">Ben Longden</div></header>
+    <div class="container">
+        <!-- Column 1: Projects List -->
+        <nav class="sidebar">
+            <div class="list-group">
+                <div class="letter">Branding & Design</div>
+                <ul class="clients">
+                    <li class="client-item" 
+                        data-img="images/design/messina-hembry.jpg" 
+                        data-images="images/design/messina-hembry.jpg, images/design/messina-1.jpg, images/design/messina-2.jpg, images/design/messina-3.jpg" 
+                        data-caption="Messina Hembry"
+                        data-desc="Brand identity and digital platform redesign for Messina Hembry.<br><br>We focused on sustainable fashion and modernising their digital footprint to appeal to a younger demographic. Deliverables included brand guidelines, website UI, and packaging design.">
+                        <span class="client-name">Messina Hembry</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/auto-trader.jpg" 
+                        data-images="images/design/auto-trader.jpg, images/design/auto-trader-1.jpg, images/design/auto-trader-2.jpg, images/design/auto-trader-3.jpg" 
+                        data-caption="AutoTrader"
+                        data-desc="">
+                        <span class="client-name">AutoTrader</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/Sana-jardin.jpg" 
+                        data-images="images/design/Sana-jardin.jpg, images/design/sana-jardin-1.jpg, images/design/sana-jardin-2.jpg, images/design/sana-jardin-3.jpg" 
+                        data-caption="Sana Jardin"
+                        data-desc="">
+                        <span class="client-name">Sana Jardin</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/interactive-investor.jpg" 
+                        data-images="images/design/interactive-investor.jpg, images/design/interactive-investor-1.jpg, images/design/interactive-investor-2.jpg, images/design/interactive-investor-3.jpg" 
+                        data-caption="Interactive Investor"
+                        data-desc="">
+                        <span class="client-name">Interactive Investor</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/the-guardian.jpg" 
+                        data-images="images/design/the-guardian.jpg, images/design/the-guardian-1.jpg, images/design/the-guardian-2.jpg, images/design/the-guardian-3.jpg" 
+                        data-caption="The Guardian Redesign"
+                        data-desc="">
+                        <span class="client-name">The Guardian Redesign</span><span class="client-year">2025</span><span class="client-role">The Guardian</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/the-guardian-daily.jpg" 
+                        data-images="images/design/the-guardian-daily.jpg, images/design/the-guardian-daily-1.jpg, images/design/the-guardian-daily-2.jpg, images/design/the-guardian-daily-3.jpg" 
+                        data-caption="The Guardian Daily App"
+                        data-desc="">
+                        <span class="client-name">The Guardian Daily App</span><span class="client-year">2025</span><span class="client-role">The Guardian</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/wmx.jpg" 
+                        data-images="images/design/wmx.jpg, images/design/wmx-1.jpg, images/design/wmx-2.jpg, images/design/wmx-3.jpg" 
+                        data-caption="WMX"
+                        data-desc="">
+                        <span class="client-name">WMX</span><span class="client-year">2025</span><span class="client-role">Clokkemaker</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/ebony.jpg" 
+                        data-images="images/design/ebony.jpg, images/design/ebony-1.jpg, images/design/ebony-2.jpg, images/design/ebony-3.jpg" 
+                        data-caption="Ebony Magazine"
+                        data-desc="">
+                        <span class="client-name">Ebony Magazine</span><span class="client-year">2025</span><span class="client-role">Clokkemaker</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/bet-mgm.jpg" 
+                        data-images="images/design/bet-mgm.jpg, images/design/bet-mgm-1.jpg, images/design/bet-mgm-2.jpg, images/design/bet-mgm-3.jpg" 
+                        data-caption="BET MGM"
+                        data-desc="">
+                        <span class="client-name">BET MGM</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/rcp-ldn.jpg" 
+                        data-images="images/design/rcp-ldn.jpg, images/design/rcp-ldn-1.jpg, images/design/rcp-ldn-2.jpg, images/design/rcp-ldn-3.jpg" 
+                        data-caption="RCP LDN"
+                        data-desc="">
+                        <span class="client-name">RCP LDN</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/nng.jpg" 
+                        data-images="images/design/nng.jpg, images/design/nng-1.jpg, images/design/nng-2.jpg, images/design/nng-3.jpg" 
+                        data-caption="Not Normal Group"
+                        data-desc="">
+                        <span class="client-name">Not Normal Group</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/moneyplus.jpg" 
+                        data-images="images/design/moneyplus.jpg, images/design/moneyplus-1.jpg, images/design/moneyplus-2.jpg, images/design/moneyplus-3.jpg" 
+                        data-caption="Money Plus"
+                        data-desc="">
+                        <span class="client-name">Money Plus</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/ldec.jpg" 
+                        data-images="images/design/ldec.jpg, images/design/ldec-1.jpg, images/design/ldec-2.jpg, images/design/ldec-3.jpg" 
+                        data-caption="London Doughnut Economy"
+                        data-desc="">
+                        <span class="client-name">London Doughnut Economy</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/Kiyumi.jpg" 
+                        data-images="images/design/Kiyumi.jpg, images/design/Kiyumi-1.jpg, images/design/Kiyumi-2.jpg, images/design/Kiyumi-3.jpg" 
+                        data-caption="Kiyumi"
+                        data-desc="">
+                        <span class="client-name">Kiyumi</span><span class="client-year">2025</span><span class="client-role">Studio Loba</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/cord.jpg" 
+                        data-images="images/design/cord.jpg, images/design/cord-1.jpg, images/design/cord-2.jpg, images/design/cord-3.jpg" 
+                        data-caption="Cord"
+                        data-desc="">
+                        <span class="client-name">Cord</span><span class="client-year">2025</span><span class="client-role">Cord</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/copper-projects.jpg" 
+                        data-images="images/design/copper-projects.jpg, images/design/copper-projects-1.jpg, images/design/copper-projects-2.jpg, images/design/copper-projects-3.jpg" 
+                        data-caption="Copper Projects"
+                        data-desc="">
+                        <span class="client-name">Copper Projects</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/ape.jpg" 
+                        data-images="images/design/ape.jpg, images/design/ape-1.jpg, images/design/ape-2.jpg, images/design/ape-3.jpg" 
+                        data-caption="Ape in Records"
+                        data-desc="">
+                        <span class="client-name">Ape in Records</span><span class="client-year">2025</span><span class="client-role">Clokkemaker</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/triggerise.jpg" 
+                        data-images="images/design/triggerise.jpg, images/design/triggerise-1.jpg, images/design/triggerise-2.jpg, images/design/triggerise-3.jpg" 
+                        data-caption="Triggerise"
+                        data-desc="">
+                        <span class="client-name">Triggerise</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/mamma.jpg" 
+                        data-images="images/design/mamma.jpg, images/design/mamma-1.jpg, images/design/mamma-2.jpg, images/design/mamma-3.jpg" 
+                        data-caption="Mamma Wellbeing"
+                        data-desc="">
+                        <span class="client-name">Mamma Wellbeing</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/in-their-hands.jpg" 
+                        data-images="images/design/in-their-hands.jpg, images/design/in-their-hands-1.jpg, images/design/in-their-hands-2.jpg, images/design/in-their-hands-3.jpg" 
+                        data-caption="In Their Hands"
+                        data-desc="">
+                        <span class="client-name">In Their Hands</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/tt.jpg" 
+                        data-images="images/design/tt.jpg, images/design/tt-1.jpg, images/design/tt-2.jpg, images/design/tt-3.jpg" 
+                        data-caption="TypeTen"
+                        data-desc="">
+                        <span class="client-name">TypeTen</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/andwherefore.jpg" 
+                        data-images="images/design/andwherefore.jpg, images/design/andwherefore-1.jpg, images/design/andwherefore-2.jpg, images/design/andwherefore-3.jpg" 
+                        data-caption="&wherefore"
+                        data-desc="">
+                        <span class="client-name">&wherefore</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/design/bective.jpg" 
+                        data-images="images/design/bective.jpg, images/design/bective-1.jpg, images/design/bective-2.jpg, images/design/bective-3.jpg" 
+                        data-caption="Bective Leslie Marsh"
+                        data-desc="">
+                        <span class="client-name">Bective Leslie Marsh</span><span class="client-year">2025</span><span class="client-role">Both Associates</span>
+                    </li>
+                </ul>
+            </div>
 
-            <li>Digital design</li>
-            <li>Brand Strategy</li>
-            <li>Visual Identity</li>
-            <li>Art Direction</li>
-            <li>Website Design</li>
-            <li>and Development</li>
-            <li>Editorial</li>
-            <li>Campaigns &
-            Activations</li>
-          </ul>
-          <ul>
-            <li class="title">Clients / Work</li>
-            <li>Cord</li>
-            <li>The Guardian</li>
-            <li>Clokkemaker</li>
-            <li>Warner Music</li>
-            <li>Ape In Records</li>
-            <li>Sony Music</li>
-            <li>Rough Trade</li>
-            <li>Valiant Artists</li>
-            <li>Cawston Press</li>
-            <li>Sundance</li>
-            <li>East To West</li>
-            <li>BT</li>
-            <li>Wholey Moly</li>
-            <li>Umbrella Studios</li>
-            <li>The Good Side</li>
-            <li>GrandMatter</li>
-            <li>The Modest Merchant</li>
-            <li>Mamma Wellbeing</li>
-            <li>Numoon</li>
-            <li>Triggerise</li>
-            <li>In Their Hands</li>
-            <li>Stop The Traffik</li>
-            <li>Cornwall Council</li>
-            <li>Bective Leslie Marsh</li>
-          </ul>
-        </div>
-      </div>
+            <div class="list-group">
+                <div class="letter">Art Direction & Creative</div>
+                <ul class="clients">
+                    <li class="client-item" 
+                        data-img="images/creative/old-spice.jpg" 
+                        data-images="images/creative/old-spice.jpg, images/creative/old-spice-1.jpg, images/creative/old-spice-2.jpg, images/creative/old-spice-3.jpg" 
+                        data-caption="Old Spice"
+                        data-desc="">
+                        <span class="client-name">Old Spice</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/death-to-stock.jpg" 
+                        data-images="images/creative/death-to-stock.jpg, images/creative/death-to-stock-1.jpg, images/creative/death-to-stock-2.jpg, images/creative/death-to-stock-3.jpg" 
+                        data-caption="Death To Stock"
+                        data-desc="">
+                        <span class="client-name">Death To Stock</span><span class="client-year">2025</span><span class="client-role">Studio Loba</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/auto-trader.jpg" 
+                        data-images="images/creative/auto-trader.jpg, images/creative/auto-trader-1.jpg, images/creative/auto-trader-2.jpg, images/creative/auto-trader-3.jpg" 
+                        data-caption="AutoTrader"
+                        data-desc="">
+                        <span class="client-name">AutoTrader</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/ii.jpg" 
+                        data-images="images/creative/ii.jpg, images/creative/ii-1.jpg, images/creative/ii-2.jpg, images/creative/ii-3.jpg" 
+                        data-caption="Interactive Investor"
+                        data-desc="">
+                        <span class="client-name">Interactive Investor</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/sana-jardin-creative.jpg" 
+                        data-images="images/creative/sana-jardin-creative.jpg, images/creative/sana-jardin-creative-1.jpg, images/creative/sana-jardin-creative-2.jpg, images/creative/sana-jardin-creative-3.jpg" 
+                        data-caption="Sana Jardin"
+                        data-desc="">
+                        <span class="client-name">Sana Jardin</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/the-guardian-200-years.jpg" 
+                        data-images="images/creative/the-guardian-200-years.jpg, images/creative/the-guardian-200-years-1.jpg, images/creative/the-guardian-200-years-2.jpg, images/creative/the-guardian-200-years-3.jpg" 
+                        data-caption="200 Years of The Guardian"
+                        data-desc="">
+                        <span class="client-name">200 Years of The Guardian</span><span class="client-year">2025</span><span class="client-role">The Guardian</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/today-in-focus.jpg" 
+                        data-images="images/creative/today-in-focus.jpg, images/creative/today-in-focus-1.jpg, images/creative/today-in-focus-2.jpg, images/creative/today-in-focus-3.jpg" 
+                        data-caption="The Guardian Today In Focus"
+                        data-desc="">
+                        <span class="client-name">The Guardian Today In Focus</span><span class="client-year">2025</span><span class="client-role">The Guardian</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="list-group">
+                <div class="letter">Website & Digital</div>
+                <ul class="clients">
+                    <li class="client-item" 
+                        data-img="images/websites/messina-hembry.jpg" 
+                        data-images="images/websites/messina-hembry.jpg, images/websites/messina-hembry-1.jpg, images/websites/messina-hembry-2.jpg, images/websites/messina-hembry-3.jpg" 
+                        data-caption="Messina Hembry"
+                        data-desc="">
+                        <span class="client-name">Messina Hembry</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/websites/iris-ventures.jpg" 
+                        data-images="images/websites/iris-ventures.jpg, images/websites/iris-ventures-1.jpg, images/websites/iris-ventures-2.jpg, images/websites/iris-ventures-3.jpg" 
+                        data-caption="Iris Ventures"
+                        data-desc="">
+                        <span class="client-name">Iris Ventures</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/websites/strakers.jpg" 
+                        data-images="images/websites/strakers.jpg, images/websites/strakers-1.jpg, images/websites/strakers-2.jpg, images/websites/strakers-3.jpg" 
+                        data-caption="Strakers"
+                        data-desc="">
+                        <span class="client-name">Strakers</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/websites/sana-jardin.jpg" 
+                        data-images="images/websites/sana-jardin.jpg, images/websites/sana-jardin-1.jpg, images/websites/sana-jardin-2.jpg, images/websites/sana-jardin-3.jpg" 
+                        data-caption="Sana Jardin"
+                        data-desc="">
+                        <span class="client-name">Sana Jardin</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/websites/wmx.jpg" 
+                        data-images="images/websites/wmx.jpg, images/websites/wmx-1.jpg, images/websites/wmx-2.jpg, images/websites/wmx-3.jpg" 
+                        data-caption="WMX"
+                        data-desc="">
+                        <span class="client-name">WMX</span><span class="client-year">2025</span><span class="client-role">Clokkemaker</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/websites/type-ten.jpg" 
+                        data-images="images/websites/type-ten.jpg, images/websites/type-ten-1.jpg, images/websites/type-ten-2.jpg, images/websites/type-ten-3.jpg" 
+                        data-caption="TypeTen"
+                        data-desc="">
+                        <span class="client-name">TypeTen</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/websites/sony.jpg" 
+                        data-images="images/websites/sony.jpg, images/websites/sony-1.jpg, images/websites/sony-2.jpg, images/websites/sony-3.jpg" 
+                        data-caption="Sony Music"
+                        data-desc="">
+                        <span class="client-name">Sony Music</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/websites/cawston.jpg" 
+                        data-images="images/websites/cawston.jpg, images/websites/cawston-1.jpg, images/websites/cawston-2.jpg, images/websites/cawston-3.jpg" 
+                        data-caption="Cawston Press"
+                        data-desc="">
+                        <span class="client-name">Cawston Press</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/websites/east-to-west.jpg" 
+                        data-images="images/websites/east-to-west.jpg, images/websites/east-to-west-1.jpg, images/websites/east-to-west-2.jpg, images/websites/east-to-west-3.jpg" 
+                        data-caption="East To West"
+                        data-desc="">
+                        <span class="client-name">East To West</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/websites/kiyumi.jpg" 
+                        data-images="images/websites/kiyumi.jpg, images/websites/kiyumi-1.jpg, images/websites/kiyumi-2.jpg, images/websites/kiyumi-3.jpg" 
+                        data-caption="Kiyumi"
+                        data-desc="">
+                        <span class="client-name">Kiyumi</span><span class="client-year">2025</span><span class="client-role">Studio Loba</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- New Section: Video & Animation -->
+            <div class="list-group">
+                <div class="letter">Video & Animation</div>
+                <ul class="clients">
+                    <li class="client-item" 
+                        data-video="images/video/Old Spice - Chip - Big Man Ting - Online - 13.mp4" 
+                        data-caption="Old Spice - Big Man Ting"
+                        data-desc="Description for this animation project will go here. You can add extra details or links as needed.">
+                        <span class="client-name">Old Spice</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-video="images/video/RCP_BRAND_FILM 151025.mp4" 
+                        data-caption="RCP LDN - We Love Advertising"
+                        data-desc="Description for this animation project will go here. You can add extra details or links as needed.">
+                        <span class="client-name">RCP LDN</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-video="images/video/dts_-_drop_the_trend_v1 (1080p).mp4" 
+                        data-caption="Death To Stock - Drop The Trend"
+                        data-desc="Description for this animation project will go here.">
+                        <span class="client-name">Death To Stock</span><span class="client-year">2025</span><span class="client-role">Studio Loba</span>
+                    </li>
+                    <li class="client-item" 
+                        data-video="images/video/iris_update_5.mp4" 
+                        data-caption="Iris Ventures - Brands Launch"
+                        data-desc="Description for this animation project will go here.">
+                        <span class="client-name">Iris Ventures</span><span class="client-year">2025</span><span class="client-role">Studio Loba</span>
+                    </li>
+                    <li class="client-item" 
+                        data-video="images/video/Sana jardin_Main_Final.mp4" 
+                        data-caption="Sana Jardin - The Alchemy of Energy"
+                        data-desc="Description for this animation project will go here.">
+                        <span class="client-name">Sana Jardin</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li>
+                    <!-- <li class="client-item" 
+                        data-video="images/video/project-4.mp4" 
+                        data-caption="Project 4 Teaser"
+                        data-desc="Description for this animation project will go here.">
+                        <span class="client-name">Rink</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
+                    </li> -->
+                    <li class="client-item" 
+                        data-video="images/video/AT_PARKING_NOT_PARKING_15_V08.mp4" 
+                        data-caption="Autotrader - Parking"
+                        data-desc="Description for this animation project will go here.">
+                        <span class="client-name">AutoTrader</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                </ul>
+            </div>
+            
+        </nav>
+
+        <!-- Column 2: Center Stage / Media Area (Desktop Only) -->
+        <main class="center-stage" id="center-stage">
+            
+            <button id="close-btn" class="close-btn" title="Back to list">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="scroll-area" id="scroll-area">
+                <div class="content-wrapper" id="content-wrapper">
+                    
+                    <!-- Animated Grid Wrapper for Description -->
+                    <div class="description-grid" id="description-grid">
+                        <aside class="description-panel" id="description-panel">
+                            <h2 class="desc-title" id="desc-title">Project Name</h2>
+                            <div class="desc-body" id="desc-body">
+                                <!-- Description injected via JS -->
+                            </div>
+                        </aside>
+                    </div>
+
+                    <div class="image-wrapper" id="image-wrapper">
+                        <!-- Image Element for regular projects -->
+                        <img id="preview-img" src="" alt="Project Preview">
+                        
+                        <!-- Video Element for Video & Animation projects -->
+                        <video id="preview-video" src="" muted loop playsinline style="display: none;"></video>
+
+                        <!-- Invisible overlay buttons that trigger custom arrow cursors -->
+                        <div class="carousel-controls" id="carousel-controls">
+                            <button id="carousel-prev" class="carousel-btn prev" title="Previous Image"></button>
+                            <button id="carousel-next" class="carousel-btn next" title="Next Image"></button>
+                        </div>
+                        
+                        <div class="carousel-indicators" id="carousel-indicators">
+                            <!-- Dots injected via JS -->
+                        </div>
+                        
+                        <div class="preview-caption" id="preview-caption">Project Name</div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
     </div>
-    <div class="name-drop">
-      <svg class="name" width="1808" height="961" viewBox="0 0 1808 961" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path class="scrollme" d="M1297.39 158V3.77588H1319.2L1400.42 128.84H1400.85V3.77588H1420.29V158H1397.83L1317.26 34.2319H1316.83V158H1297.39Z" fill="white"/>
-        <path class="scrollme" d="M1174.2 158V3.77588H1280.69V21.0559H1194.72V70.0879H1274.85V87.3679H1194.72V140.72H1281.33V158H1174.2Z" fill="white"/>
-        <path class="scrollme" d="M1030.75 158V3.77588H1083.67C1131.19 3.77588 1157.76 27.7519 1157.76 77.2159C1157.76 128.84 1135.08 158 1083.67 158H1030.75ZM1051.27 140.72H1085.4C1099.44 140.72 1137.24 136.832 1137.24 80.0239C1137.24 43.3039 1123.63 21.0559 1085.83 21.0559H1051.27V140.72Z" fill="white"/>
-        <path class="scrollme" d="M867.933 83.912C867.933 38.984 892.557 0.104004 941.373 0.104004C974.853 0.104004 1002.07 15.224 1007.69 51.296H987.165C983.061 27.968 964.485 17.384 941.373 17.384C904.005 17.384 888.453 50 888.453 82.832C888.453 115.016 907.029 144.392 941.373 144.392C973.341 144.392 991.917 122.36 990.837 94.064H941.589V76.784H1009.2V158H996.237L990.837 138.776C978.741 154.76 959.301 161.672 941.373 161.672C895.365 161.672 867.933 124.304 867.933 83.912Z" fill="white"/>
-        <path class="scrollme" d="M728.034 158V3.77588H749.85L831.066 128.84H831.498V3.77588H850.938V158H828.474L747.906 34.2319H747.474V158H728.034Z" fill="white"/>
-        <path class="scrollme" d="M564.141 80.888C564.141 38.768 588.981 0.104004 638.013 0.104004C687.045 0.104004 711.885 38.768 711.885 80.888C711.885 123.008 687.045 161.672 638.013 161.672C588.981 161.672 564.141 123.008 564.141 80.888ZM584.661 80.888C584.661 111.992 600.429 144.392 638.013 144.392C675.597 144.392 691.365 111.992 691.365 80.888C691.365 49.784 675.597 17.384 638.013 17.384C600.429 17.384 584.661 49.784 584.661 80.888Z" fill="white"/>
-        <path class="scrollme" d="M469.202 158V3.77588H489.722V140.72H571.37V158H469.202Z" fill="white"/>
-        <path class="scrollme" d="M270.266 158V3.77588H292.082L373.298 128.84H373.73V3.77588H393.17V158H370.706L290.138 34.2319H289.706V158H270.266Z" fill="white"/>
-        <path class="scrollme" d="M147.075 158V3.77588H253.563V21.0559H167.595V70.0879H247.731V87.3679H167.595V140.72H254.211V158H147.075Z" fill="white"/>
-        <path class="scrollme" d="M7.84814 158V3.77588H63.7921C77.1841 3.77588 95.5442 3.77588 104.616 9.39188C114.768 15.4399 122.76 26.2399 122.76 41.5759C122.76 57.9919 114.336 70.3039 99.8641 76.1359V76.5679C118.872 80.6719 129.24 94.7119 129.24 113.72C129.24 136.184 112.824 158 82.3681 158H7.84814ZM28.3681 70.0879H69.4081C92.7362 70.0879 102.24 61.8799 102.24 45.4639C102.24 23.8639 87.3362 21.0559 69.4081 21.0559H28.3681V70.0879ZM28.3681 140.72H79.7761C97.7041 140.72 108.72 130.136 108.72 113.072C108.72 92.9839 92.5202 87.3679 75.2402 87.3679H28.3681V140.72Z" fill="white"/>
-        <path class="scrollme" d="M818.329 338V183.776H924.817V201.056H838.849V250.088H918.985V267.368H838.849V320.72H925.465V338H818.329Z" fill="white"/>
-        <path class="scrollme" d="M810.482 183.776L755.618 338H732.29L677.858 183.776H700.106L744.17 317.48H744.602L789.098 183.776H810.482Z" fill="white"/>
-        <path class="scrollme" d="M648.527 338V183.776H669.047V338H648.527Z" fill="white"/>
-        <path class="scrollme" d="M567.264 338V201.056H515.856V183.776H639.192V201.056H587.784V338H567.264Z" fill="white"/>
-        <path class="scrollme" d="M399.365 338L459.629 183.776H482.309L542.573 338H519.893L503.045 291.56H437.813L420.533 338H399.365ZM444.293 274.28H496.565L470.861 202.352H470.429L444.293 274.28Z" fill="white"/>
-        <path class="scrollme" d="M294.318 338V183.776H400.806V201.056H314.838V250.088H394.974V267.368H314.838V320.72H401.454V338H294.318Z" fill="white"/>
-        <path class="scrollme" d="M155.091 338V183.776H227.667C256.827 183.776 274.539 199.328 274.539 224.168C274.539 242.96 266.547 258.08 247.755 263.264V263.696C265.683 267.152 269.139 280.544 270.867 295.448C271.947 310.352 271.299 327.632 279.939 338H257.043C251.211 331.736 254.451 315.104 251.427 299.984C249.051 285.08 245.595 272.12 225.723 272.12H175.611V338H155.091ZM175.611 254.84H218.379C237.387 254.84 254.019 249.872 254.019 227.408C254.019 212.072 245.811 201.056 226.587 201.056H175.611V254.84Z" fill="white"/>
-        <path class="scrollme" d="M0.288086 261.32C0.288086 216.392 25.7761 180.104 73.2961 180.104C105.48 180.104 132.264 197.384 136.8 230.216H116.28C111.744 208.4 94.6801 197.384 73.0801 197.384C36.3601 197.384 20.8081 227.624 20.8081 259.808C20.8081 295.016 36.3601 324.392 73.2961 324.392C100.08 324.392 116.064 305.384 117.792 279.896H138.312C134.208 318.56 110.664 341.672 71.5681 341.672C23.8321 341.672 0.288086 306.248 0.288086 261.32Z" fill="white"/>
-        <path class="scrollme" d="M1679.48 518V363.776H1752.05C1781.21 363.776 1798.93 379.328 1798.93 404.168C1798.93 422.96 1790.93 438.08 1772.14 443.264V443.696C1790.07 447.152 1793.53 460.544 1795.25 475.448C1796.33 490.352 1795.69 507.632 1804.33 518H1781.43C1775.6 511.736 1778.84 495.104 1775.81 479.984C1773.44 465.08 1769.98 452.12 1750.11 452.12H1700V518H1679.48ZM1700 434.84H1742.77C1761.77 434.84 1778.41 429.872 1778.41 407.408C1778.41 392.072 1770.2 381.056 1750.97 381.056H1700V434.84Z" fill="white"/>
-        <path class="scrollme" d="M1515.37 440.888C1515.37 398.768 1540.21 360.104 1589.24 360.104C1638.27 360.104 1663.11 398.768 1663.11 440.888C1663.11 483.008 1638.27 521.672 1589.24 521.672C1540.21 521.672 1515.37 483.008 1515.37 440.888ZM1535.89 440.888C1535.89 471.992 1551.66 504.392 1589.24 504.392C1626.82 504.392 1642.59 471.992 1642.59 440.888C1642.59 409.784 1626.82 377.384 1589.24 377.384C1551.66 377.384 1535.89 409.784 1535.89 440.888Z" fill="white"/>
-        <path class="scrollme" d="M1450.15 518V381.056H1398.74V363.776H1522.08V381.056H1470.67V518H1450.15Z" fill="white"/>
-        <path class="scrollme" d="M1265.63 441.32C1265.63 396.392 1291.11 360.104 1338.63 360.104C1370.82 360.104 1397.6 377.384 1402.14 410.216H1381.62C1377.08 388.4 1360.02 377.384 1338.42 377.384C1301.7 377.384 1286.15 407.624 1286.15 439.808C1286.15 475.016 1301.7 504.392 1338.63 504.392C1365.42 504.392 1381.4 485.384 1383.13 459.896H1403.65C1399.55 498.56 1376 521.672 1336.91 521.672C1289.17 521.672 1265.63 486.248 1265.63 441.32Z" fill="white"/>
-        <path class="scrollme" d="M1149.78 518V363.776H1256.27V381.056H1170.3V430.088H1250.44V447.368H1170.3V500.72H1256.92V518H1149.78Z" fill="white"/>
-        <path class="scrollme" d="M1010.55 518V363.776H1083.13C1112.29 363.776 1130 379.328 1130 404.168C1130 422.96 1122.01 438.08 1103.22 443.264V443.696C1121.14 447.152 1124.6 460.544 1126.33 475.448C1127.41 490.352 1126.76 507.632 1135.4 518H1112.5C1106.67 511.736 1109.91 495.104 1106.89 479.984C1104.51 465.08 1101.06 452.12 1081.18 452.12H1031.07V518H1010.55ZM1031.07 434.84H1073.84C1092.85 434.84 1109.48 429.872 1109.48 407.408C1109.48 392.072 1101.27 381.056 1082.05 381.056H1031.07V434.84Z" fill="white"/>
-        <path class="scrollme" d="M964.158 518V363.776H984.678V518H964.158Z" fill="white"/>
-        <path class="scrollme" d="M819.848 518V363.776H872.768C920.288 363.776 946.856 387.752 946.856 437.216C946.856 488.84 924.176 518 872.768 518H819.848ZM840.368 500.72H874.496C888.536 500.72 926.336 496.832 926.336 440.024C926.336 403.304 912.728 381.056 874.928 381.056H840.368V500.72Z" fill="white"/>
-        <path class="scrollme" d="M744.891 759.768C765.627 727.152 773.403 695.4 773.403 660.192C773.403 623.904 765.411 592.152 744.891 559.104H758.931C779.667 591.288 792.843 622.392 792.843 660.192C792.843 694.104 781.179 730.176 758.931 759.768H744.891Z" fill="white"/>
-        <path class="scrollme" d="M624.671 717V562.776H697.247C726.407 562.776 744.119 578.328 744.119 603.168C744.119 621.96 736.127 637.08 717.335 642.264V642.696C735.263 646.152 738.719 659.544 740.447 674.448C741.527 689.352 740.879 706.632 749.519 717H726.623C720.791 710.736 724.031 694.104 721.007 678.984C718.631 664.08 715.175 651.12 695.303 651.12H645.191V717H624.671ZM645.191 633.84H687.959C706.967 633.84 723.599 628.872 723.599 606.408C723.599 591.072 715.391 580.056 696.167 580.056H645.191V633.84Z" fill="white"/>
-        <path class="scrollme" d="M501.265 717V562.776H607.753V580.056H521.785V629.088H601.921V646.368H521.785V699.72H608.401V717H501.265Z" fill="white"/>
-        <path class="scrollme" d="M447.31 658.68C447.31 624.768 458.974 588.696 481.222 559.104H495.262C474.526 591.72 466.75 623.472 466.75 658.68C466.75 694.968 474.742 726.72 495.262 759.768H481.222C460.486 727.584 447.31 696.48 447.31 658.68Z" fill="white"/>
-        <path class="scrollme" d="M310.56 717V562.776H363.48C411 562.776 437.568 586.752 437.568 636.216C437.568 687.84 414.888 717 363.48 717H310.56ZM331.08 699.72H365.208C379.248 699.72 417.048 695.832 417.048 639.024C417.048 602.304 403.44 580.056 365.64 580.056H331.08V699.72Z" fill="white"/>
-        <path class="scrollme" d="M146.451 639.888C146.451 597.768 171.291 559.104 220.323 559.104C269.355 559.104 294.195 597.768 294.195 639.888C294.195 682.008 269.355 720.672 220.323 720.672C171.291 720.672 146.451 682.008 146.451 639.888ZM166.971 639.888C166.971 670.992 182.739 703.392 220.323 703.392C257.907 703.392 273.675 670.992 273.675 639.888C273.675 608.784 257.907 576.384 220.323 576.384C182.739 576.384 166.971 608.784 166.971 639.888Z" fill="white"/>
-        <path class="scrollme" d="M0.288086 640.32C0.288086 595.392 25.7761 559.104 73.2961 559.104C105.48 559.104 132.264 576.384 136.8 609.216H116.28C111.744 587.4 94.6801 576.384 73.0801 576.384C36.3601 576.384 20.8081 606.624 20.8081 638.808C20.8081 674.016 36.3601 703.392 73.2961 703.392C100.08 703.392 116.064 684.384 117.792 658.896H138.312C134.208 697.56 110.664 720.672 71.5681 720.672C23.8321 720.672 0.288086 685.248 0.288086 640.32Z" fill="white"/>
-        <path class="scrollme" d="M1682.98 957V802.776H1755.56C1784.72 802.776 1802.43 818.328 1802.43 843.168C1802.43 861.96 1794.44 877.08 1775.64 882.264V882.696C1793.57 886.152 1797.03 899.544 1798.76 914.448C1799.84 929.352 1799.19 946.632 1807.83 957H1784.93C1779.1 950.736 1782.34 934.104 1779.32 918.984C1776.94 904.08 1773.48 891.12 1753.61 891.12H1703.5V957H1682.98ZM1703.5 873.84H1746.27C1765.28 873.84 1781.91 868.872 1781.91 846.408C1781.91 831.072 1773.7 820.056 1754.48 820.056H1703.5V873.84Z" fill="white"/>
-        <path class="scrollme" d="M1559.57 957V802.776H1666.06V820.056H1580.09V869.088H1660.23V886.368H1580.09V939.72H1666.71V957H1559.57Z" fill="white"/>
-        <path class="scrollme" d="M1412.12 957V802.776H1433.93L1515.15 927.84H1515.58V802.776H1535.02V957H1512.56L1431.99 833.232H1431.56V957H1412.12Z" fill="white"/>
-        <path class="scrollme" d="M1249.51 882.912C1249.51 837.984 1274.14 799.104 1322.95 799.104C1356.43 799.104 1383.65 814.224 1389.26 850.296H1368.74C1364.64 826.968 1346.06 816.384 1322.95 816.384C1285.58 816.384 1270.03 849 1270.03 881.832C1270.03 914.016 1288.61 943.392 1322.95 943.392C1354.92 943.392 1373.5 921.36 1372.42 893.064H1323.17V875.784H1390.78V957H1377.82L1372.42 937.776C1360.32 953.76 1340.88 960.672 1322.95 960.672C1276.94 960.672 1249.51 923.304 1249.51 882.912Z" fill="white"/>
-        <path class="scrollme" d="M1210.68 957V802.776H1231.2V957H1210.68Z" fill="white"/>
-        <path class="scrollme" d="M1187.04 847.92H1167.6C1165.22 825.672 1150.75 816.384 1129.37 816.384C1111.87 816.384 1094.81 822.648 1094.81 842.736C1094.81 880.752 1193.52 853.968 1193.52 914.664C1193.52 947.496 1161.34 960.672 1133.26 960.672C1098.7 960.672 1069.54 943.608 1069.54 906.24H1088.98C1088.98 932.16 1110.58 943.392 1133.9 943.392C1152.48 943.392 1173 937.56 1173 915.312C1173 872.976 1074.29 900.84 1074.29 844.248C1074.29 813.144 1101.94 799.104 1130.23 799.104C1161.77 799.104 1185.96 814.008 1187.04 847.92Z" fill="white"/>
-        <path class="scrollme" d="M954.985 957V802.776H1061.47V820.056H975.505V869.088H1055.64V886.368H975.505V939.72H1062.12V957H954.985Z" fill="white"/>
-        <path class="scrollme" d="M811.539 957V802.776H864.459C911.979 802.776 938.547 826.752 938.547 876.216C938.547 927.84 915.867 957 864.459 957H811.539ZM832.059 939.72H866.187C880.227 939.72 918.027 935.832 918.027 879.024C918.027 842.304 904.419 820.056 866.619 820.056H832.059V939.72Z" fill="white"/>
-        </svg>
-        
-    </div>
-  </div>
-  <div class="flex project-title white">
-    <div class="left">
-      <h1>WMX</h1>
-      <h1 class="sub">BRANDING / WEBSITE</h1>
-    </div>
-  </div>
-  <div class="fullwidth">
-    <div class="carousel">
-      <img class="lazy image" data-src="carousel/wmx1.jpg">
-      <img class="lazy image" data-src="carousel/wmx2.jpg">
-      <img class="lazy image" data-src="carousel/wmx3.jpg">
-      <img class="lazy image" data-src="carousel/wmx4.jpg">
-      <img class="lazy image" data-src="carousel/wmx5.jpg">
-      <img class="lazy image" data-src="carousel/wmx6.jpg">
-    </div>
-    <div class="dots white">
-    </div>
-  </div>
-  <div class="flex project-title white">
-    <div class="left">
-      <h1>AIR</h1>
-      <h1 class="sub">BRANDING / WEBSITE</h1>
-    </div>
-  </div>
-  <div class="fullwidth">
-    <div class="carousel">
-      <img class="lazy image" data-src="carousel/air1.jpg">
-      <img class="lazy image" data-src="carousel/air2.jpg">
-      <img class="lazy image" data-src="carousel/air3.jpg">
-      <img class="lazy image" data-src="carousel/air4.jpg">
-      <img class="lazy image" data-src="carousel/air5.jpg">
-      <img class="lazy image" data-src="carousel/air6.jpg">
-    </div>
-    <div class="dots white">
-    </div>
-  </div>
-  <div class="flex project-title white">
-    <div class="left">
-      <h1>THE GUARDIAN</h1>
-      <h1 class="sub">DESIGN DIRECTOR</h1>
-    </div>
-  </div>
-  <div class="fullwidth">
-    <div class="carousel">
-      <img class="lazy image" data-src="carousel/gu1.jpg">
-      <img class="lazy image" data-src="carousel/gu2.jpg">
-      <img class="lazy image" data-src="carousel/gu3.jpg">
-      <img class="lazy image" data-src="carousel/gu4.jpg">
-      <img class="lazy image" data-src="carousel/gu5.jpg">
-      <img class="lazy image" data-src="carousel/gu6.jpg">
-      <img class="lazy image" data-src="carousel/gu7.jpg">
-      <img class="lazy image" data-src="carousel/gu8.jpg">
-    </div>
-    <div class="dots white">
-    </div>
-  </div>
-  <div class="flex project-title white">
-    <div class="left">
-      <h1>STRAKER'S</h1>
-      <h1 class="sub">DESIGN / WEBSITE</h1>
-    </div>
-  </div>
-  <div class="fullwidth">
-    <div class="carousel">
-      <img class="lazy image" data-src="carousel/strak1.jpg">
-      <img class="lazy image" data-src="carousel/strak2.jpg">
-      <img class="lazy image" data-src="carousel/strak3.jpg">
-      <img class="lazy image" data-src="carousel/strak4.jpg">
-      <img class="lazy image" data-src="carousel/strak5.jpg">
-    </div>
-    <div class="dots white">
-    </div>
-  </div>
-  <div class="flex project-title white">
-    <div class="left">
-      <h1>TYPETEN</h1>
-      <h1 class="sub">DESIGN / WEBSITE</h1>
-    </div>
-  </div>
-  <div class="fullwidth">
-    <div class="carousel">
-      <img class="lazy image" data-src="carousel/tt1.jpg">
-      <img class="lazy image" data-src="carousel/tt2.jpg">
-      <img class="lazy image" data-src="carousel/tt3.jpg">
-      <img class="lazy image" data-src="carousel/tt4.jpg">
-      <img class="lazy image" data-src="carousel/tt5.jpg">
-      <img class="lazy image" data-src="carousel/tt6.jpg">
-      <img class="lazy image" data-src="carousel/tt7.jpg">
-      <img class="lazy image" data-src="carousel/tt8.jpg">
-    </div>
-    <div class="dots white">
-    </div>
-  </div>
-  <div class="flex project-title white">
-    <div class="left">
-      <h1>COPPER PROJECTS</h1>
-      <h1 class="sub">DESIGN / WEBSITE</h1>
-    </div>
-  </div>
-  <div class="fullwidth">
-    <div class="carousel">
-      <img class="lazy image" data-src="carousel/CP1.jpg">
-      <img class="lazy image" data-src="carousel/CP2.jpg">
-      <img class="lazy image" data-src="carousel/CP3.jpg">
-      <img class="lazy image" data-src="carousel/CP4.jpg">
-      <img class="lazy image" data-src="carousel/CP5.jpg">
-      <img class="lazy image" data-src="carousel/CP6.jpg">
-    </div>
-    <div class="dots white">
-    </div>
-  </div>
-  <div class="ticker-wrap">
-    <div class="ticker">
-      <div class="ticker__item"><span class="dot">•</span> Freelance Design & Creative Director</div>
-      <div class="ticker__item"><span class="dot">•</span> Prev Digital Design Director The Guardian</div>
-      <div class="ticker__item"><span class="dot">•</span> Creative Coder</div>
-      <div class="ticker__item"><span class="dot">•</span> Director RoomFifty</div>
-      <div class="ticker__item"><span class="dot">•</span> Author of Graphic Design is Mental</div>
-      <div class="ticker__item"><span class="dot">•</span> Freelance Design & Creative Director</div>
-      <div class="ticker__item"><span class="dot">•</span> Prev Digital Design Director The Guardian</div>
-      <div class="ticker__item"><span class="dot">•</span> Creative Coder</div>
-      <div class="ticker__item"><span class="dot">•</span> Director RoomFifty</div>
-      <div class="ticker__item"><span class="dot">•</span> Author of Graphic Design is Mental</div>
-      <div class="ticker__item"><span class="dot">•</span> Freelance Design & Creative Director</div>
-      <div class="ticker__item"><span class="dot">•</span> Prev Digital Design Director The Guardian</div>
-      <div class="ticker__item"><span class="dot">•</span> Creative Coder</div>
-      <div class="ticker__item"><span class="dot">•</span> Director RoomFifty</div>
-      <div class="ticker__item"><span class="dot">•</span> Author of Graphic Design is Mental</div>
-    </div>
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
-<script src="https://unpkg.com/animejs-player@1.0.8/index.bundle.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-<script src="js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const listItems = document.querySelectorAll('.client-item');
+            const centerStage = document.getElementById('center-stage');
+            const scrollArea = document.getElementById('scroll-area');
+            const contentWrapper = document.getElementById('content-wrapper');
+            const closeBtn = document.getElementById('close-btn');
+
+            const imageWrapper = document.getElementById('image-wrapper');
+            const previewImg = document.getElementById('preview-img');
+            const previewVideo = document.getElementById('preview-video');
+            const previewCaption = document.getElementById('preview-caption');
+            
+            const descGrid = document.getElementById('description-grid');
+            const descTitle = document.getElementById('desc-title');
+            const descBody = document.getElementById('desc-body');
+
+            const carouselControls = document.getElementById('carousel-controls');
+            const btnPrev = document.getElementById('carousel-prev');
+            const btnNext = document.getElementById('carousel-next');
+            const indicators = document.getElementById('carousel-indicators');
+
+            let activeProject = null;
+            let currentCarouselImages = [];
+            let currentIndex = 0;
+            
+            // Track if we are on mobile
+            let isMobile = window.innerWidth <= 1024;
+            window.addEventListener('resize', () => {
+                const newlyMobile = window.innerWidth <= 1024;
+                if (newlyMobile !== isMobile) {
+                    isMobile = newlyMobile;
+                    closeActiveProject(); // Reset view if screen flips past breakpoint
+                }
+            });
+
+            // --- CAROUSEL FUNCTIONS (Desktop) ---
+            function updateCarouselImage() {
+                previewImg.src = currentCarouselImages[currentIndex];
+                const dots = indicators.querySelectorAll('.dot');
+                dots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === currentIndex);
+                });
+            }
+
+            btnPrev.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if(currentCarouselImages.length <= 1) return;
+                currentIndex = (currentIndex === 0) ? currentCarouselImages.length - 1 : currentIndex - 1;
+                updateCarouselImage();
+            });
+
+            btnNext.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if(currentCarouselImages.length <= 1) return;
+                currentIndex = (currentIndex === currentCarouselImages.length - 1) ? 0 : currentIndex + 1;
+                updateCarouselImage();
+            });
+
+            // --- RESET / CLOSE FUNCTION ---
+            function closeActiveProject() {
+                activeProject = null;
+                listItems.forEach(li => li.classList.remove('active-item'));
+                
+                // Pause video if playing
+                previewVideo.pause();
+                previewVideo.muted = true;
+                previewVideo.controls = false;
+
+                // Reset Desktop
+                if (descGrid) descGrid.classList.remove('active');
+                if (centerStage) centerStage.classList.remove('is-active');
+                if (imageWrapper) {
+                    imageWrapper.classList.remove('is-carousel');
+                    imageWrapper.style.opacity = '0';
+                }
+                
+                // Reset Mobile
+                document.querySelectorAll('.mobile-accordion-wrapper').forEach(acc => {
+                    acc.classList.remove('open');
+                });
+            }
+
+            // Desktop Click-Out to Close
+            closeBtn.addEventListener('click', closeActiveProject);
+            scrollArea.addEventListener('click', (e) => {
+                if (e.target === scrollArea || e.target === contentWrapper) {
+                    closeActiveProject();
+                }
+            });
+
+            // --- DESKTOP RENDER LOGIC ---
+            function renderDesktopProject(item, isPreview) {
+                const imgSrc = item.getAttribute('data-img');
+                const videoSrc = item.getAttribute('data-video');
+                const captionText = item.getAttribute('data-caption');
+                const descText = item.getAttribute('data-desc') || '';
+                
+                previewCaption.textContent = captionText;
+
+                // 1. IS THIS A VIDEO PROJECT?
+                if (videoSrc) {
+                    // Setup Video
+                    previewImg.style.display = 'none';
+                    previewVideo.style.display = 'block';
+                    imageWrapper.classList.remove('is-carousel');
+                    indicators.innerHTML = ''; 
+                    
+                    // Crucial: Only reload the video source if it has changed. 
+                    // This allows the video to continue playing seamlessly when clicked.
+                    if (previewVideo.getAttribute('src') !== videoSrc) {
+                        previewVideo.setAttribute('src', videoSrc);
+                        previewVideo.play().catch(e => console.log('Autoplay issue:', e));
+                    } else if (previewVideo.paused) {
+                        previewVideo.play().catch(e => console.log('Autoplay issue:', e));
+                    }
+
+                    // Handle text & UI if clicked
+                    if (!isPreview) {
+                        centerStage.classList.add('is-active');
+                        descTitle.textContent = captionText;
+                        if (descText) {
+                            descBody.innerHTML = descText;
+                            descGrid.classList.add('active');
+                        } else {
+                            descGrid.classList.remove('active');
+                        }
+                        
+                        // Unmute and show controls when clicked
+                        previewVideo.muted = false;
+                        previewVideo.controls = true;
+                    } else {
+                        // Keep muted and hidden controls on hover
+                        previewVideo.muted = true;
+                        previewVideo.controls = false;
+                    }
+                    
+                    imageWrapper.style.opacity = '1';
+
+                // 2. THIS IS A STANDARD IMAGE PROJECT
+                } else {
+                    // Pause any running videos and swap to Image
+                    previewVideo.pause();
+                    previewVideo.style.display = 'none';
+                    previewImg.style.display = 'block';
+
+                    if (isPreview) {
+                        previewImg.src = imgSrc;
+                        imageWrapper.classList.remove('is-carousel'); 
+                        imageWrapper.style.opacity = '1';
+                    } else {
+                        const imagesAttr = item.getAttribute('data-images');
+                        if (imagesAttr) {
+                            currentCarouselImages = imagesAttr.split(',').map(s => s.trim());
+                        } else {
+                            currentCarouselImages = [imgSrc];
+                        }
+                        
+                        currentIndex = 0;
+                        centerStage.classList.add('is-active');
+                        descTitle.textContent = captionText;
+                        
+                        if (descText) {
+                            descBody.innerHTML = descText;
+                            descGrid.classList.add('active');
+                        } else {
+                            descGrid.classList.remove('active');
+                        }
+                        
+                        indicators.innerHTML = '';
+                        if(currentCarouselImages.length > 1) {
+                            currentCarouselImages.forEach((_, i) => {
+                                const dot = document.createElement('div');
+                                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                                indicators.appendChild(dot);
+                            });
+                            imageWrapper.classList.add('is-carousel');
+                        } else {
+                            imageWrapper.classList.remove('is-carousel');
+                        }
+                        
+                        updateCarouselImage();
+                        imageWrapper.style.opacity = '1';
+                    }
+                }
+            }
+
+            // --- MOBILE ACCORDION LOGIC ---
+            function handleMobileClick(item) {
+                const wasActive = item.classList.contains('active-item');
+                closeActiveProject();
+
+                if (!wasActive) {
+                    item.classList.add('active-item');
+                    activeProject = item;
+
+                    let accordion = item.querySelector('.mobile-accordion-wrapper');
+                    
+                    // Build accordion if it hasn't been generated yet
+                    if (!accordion) {
+                        accordion = document.createElement('div');
+                        accordion.className = 'mobile-accordion-wrapper';
+                        
+                        const inner = document.createElement('div');
+                        inner.className = 'mobile-accordion-content';
+                        
+                        // Parse description
+                        const descText = item.getAttribute('data-desc');
+                        if (descText) {
+                            const descDiv = document.createElement('div');
+                            descDiv.className = 'mobile-desc';
+                            descDiv.innerHTML = descText;
+                            inner.appendChild(descDiv);
+                        }
+
+                        // Parse Video (if it's a video project)
+                        const videoSrc = item.getAttribute('data-video');
+                        if (videoSrc) {
+                            const vid = document.createElement('video');
+                            vid.src = videoSrc;
+                            vid.muted = true;
+                            vid.loop = true;
+                            vid.playsInline = true;
+                            vid.autoplay = true;
+                            vid.controls = true; // Add controls so mobile users can unmute
+                            inner.appendChild(vid);
+                        }
+                        
+                        // Parse images (Vertical stack)
+                        const imagesAttr = item.getAttribute('data-images') || item.getAttribute('data-img');
+                        if (imagesAttr && !videoSrc) { // Exclude images if it's a dedicated video block, just in case
+                            const images = imagesAttr.split(',').map(s => s.trim());
+                            images.forEach(src => {
+                                const img = document.createElement('img');
+                                img.src = src;
+                                img.loading = "lazy"; // Prevents loading all images at once
+                                inner.appendChild(img);
+                            });
+                        }
+                        
+                        accordion.appendChild(inner);
+                        item.appendChild(accordion);
+                    }
+                    
+                    // Force a browser reflow before adding the open class to ensure the slide animation triggers
+                    void accordion.offsetWidth;
+                    accordion.classList.add('open');
+                    
+                    // Smoothly scroll the item to the top of the viewport
+                    setTimeout(() => {
+                        const headerOffset = 90; // Adjust for fixed header height
+                        const elementPosition = item.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({
+                             top: offsetPosition,
+                             behavior: "smooth"
+                        });
+                    }, 300); // Wait for animation to start
+                }
+            }
+
+
+            // --- ATTACH EVENT LISTENERS ---
+            listItems.forEach(item => {
+                
+                item.addEventListener('mouseenter', (e) => {
+                    if (isMobile || activeProject) return; 
+                    renderDesktopProject(item, true);
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    if (isMobile) return;
+                    if (!activeProject) {
+                        imageWrapper.style.opacity = '0';
+                        previewVideo.pause(); // Clean up audio/cpu if they mouse off a video quickly
+                    }
+                });
+
+                item.addEventListener('click', (e) => {
+                    // Prevent re-triggering if the user is clicking an image/video inside the mobile accordion
+                    if (e.target.closest('.mobile-accordion-wrapper')) return;
+
+                    if (isMobile) {
+                        handleMobileClick(item);
+                    } else {
+                        listItems.forEach(li => li.classList.remove('active-item'));
+                        item.classList.add('active-item');
+                        activeProject = item;
+                        
+                        renderDesktopProject(item, false);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
