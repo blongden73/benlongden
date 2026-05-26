@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ben Longden - Creative Direction - Design</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     <style>
         :root {
             --bg-color: #000000;
@@ -77,6 +81,15 @@
             pointer-events: auto; 
         }
 
+        footer {
+            margin-top: 60px;
+        }
+
+        .description h1 {
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
         /* Sidebar List */
         .sidebar {
             width: 680px;
@@ -90,6 +103,7 @@
             margin-bottom: 4px;
             border-top: 1px solid rgba(255,255,255,0.15); 
             margin-top: 40px;
+            padding-top: 20px;
         }
 
         .letter {
@@ -396,7 +410,9 @@
             }
             header { 
                 background: rgba(0,0,0,0.8); 
-                backdrop-filter: blur(5px); 
+                backdrop-filter: blur(5px);
+                padding: 20px 16px;
+                gap: 10%;
             }
             /* HIDE BG REEL ON MOBILE */
             .bg-reel {
@@ -415,15 +431,17 @@
             }
             .letter {
                 width: 100%;
-                margin-bottom: 15px;
+                margin-bottom: 65px;
                 font-size: 0.75rem;
             }
             .client-item {
-                grid-template-columns: 1fr 45px 75px;
+                grid-template-columns: 1fr 45px 96px;
                 gap: 10px;
                 font-size: 0.9rem;
                 margin-bottom: 25px; 
             }
+
+            .client-role { text-align: right; }
 
             /* DISPLAY HERO MEDIA ON MOBILE */
             .mobile-hero-media {
@@ -454,6 +472,61 @@
     
     <div class="container">
         <nav class="sidebar">
+            <div class="description"><h1>Creative Director & Designer with more than 15 years of experience partnering with brands to craft compelling stories, distinctive identities, and culturally resonant visual worlds across fashion, lifestyle, and luxury sectors. Skilled across both concept and execution, from brand strategy and creative direction through to design, motion, and content production. </h1></div>
+            <div class="list-group">
+                <div class="letter">Art Direction & Creative</div>
+                <ul class="clients">
+                    <li class="client-item" 
+                        data-img="images/creative/old-spice.jpg" 
+                        data-images="images/creative/old-spice.jpg, images/creative/old-spice-1.jpg, images/creative/old-spice-2.jpg, images/creative/old-spice-3.jpg" 
+                        data-caption="Old Spice"
+                        data-desc="">
+                        <span class="client-name">Old Spice</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/death-to-stock.jpg" 
+                        data-images="images/creative/death-to-stock.jpg, images/creative/death-to-stock-1.jpg, images/creative/death-to-stock-2.jpg, images/creative/death-to-stock-3.jpg" 
+                        data-caption="Death To Stock"
+                        data-desc="">
+                        <span class="client-name">Death To Stock</span><span class="client-year">2025</span><span class="client-role">Studio Loba</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/auto-trader.jpg" 
+                        data-images="images/creative/auto-trader.jpg, images/creative/auto-trader-1.jpg, images/creative/auto-trader-2.jpg, images/creative/auto-trader-3.jpg" 
+                        data-caption="AutoTrader"
+                        data-desc="">
+                        <span class="client-name">AutoTrader</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/ii.jpg" 
+                        data-images="images/creative/ii.jpg, images/creative/ii-1.jpg, images/creative/ii-2.jpg, images/creative/ii-3.jpg" 
+                        data-caption="Interactive Investor"
+                        data-desc="">
+                        <span class="client-name">Interactive Investor</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/sana-jardin-creative.jpg" 
+                        data-images="images/creative/sana-jardin-creative.jpg, images/creative/sana-jardin-creative-1.jpg, images/creative/sana-jardin-creative-2.jpg, images/creative/sana-jardin-creative-3.jpg" 
+                        data-caption="Sana Jardin"
+                        data-desc="">
+                        <span class="client-name">Sana Jardin</span><span class="client-year">2023</span><span class="client-role">Freelance</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/the-guardian-200-years.jpg" 
+                        data-images="images/creative/the-guardian-200-years.jpg, images/creative/the-guardian-200-years-1.jpg, images/creative/the-guardian-200-years-2.jpg, images/creative/the-guardian-200-years-3.jpg" 
+                        data-caption="200 Years of The Guardian"
+                        data-desc="">
+                        <span class="client-name">200 Years of The Guardian</span><span class="client-year">2019</span><span class="client-role">The Guardian</span>
+                    </li>
+                    <li class="client-item" 
+                        data-img="images/creative/today-in-focus.jpg" 
+                        data-images="images/creative/today-in-focus.jpg, images/creative/today-in-focus-1.jpg, images/creative/today-in-focus-2.jpg, images/creative/today-in-focus-3.jpg" 
+                        data-caption="The Guardian Today In Focus"
+                        data-desc="">
+                        <span class="client-name">The Guardian Today In Focus</span><span class="client-year">2018</span><span class="client-role">The Guardian</span>
+                    </li>
+                </ul>
+            </div>
             <div class="list-group">
                 <div class="letter">Branding & Design</div>
                 <ul class="clients">
@@ -622,61 +695,6 @@
             </div>
 
             <div class="list-group">
-                <div class="letter">Art Direction & Creative</div>
-                <ul class="clients">
-                    <li class="client-item" 
-                        data-img="images/creative/old-spice.jpg" 
-                        data-images="images/creative/old-spice.jpg, images/creative/old-spice-1.jpg, images/creative/old-spice-2.jpg, images/creative/old-spice-3.jpg" 
-                        data-caption="Old Spice"
-                        data-desc="">
-                        <span class="client-name">Old Spice</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
-                    </li>
-                    <li class="client-item" 
-                        data-img="images/creative/death-to-stock.jpg" 
-                        data-images="images/creative/death-to-stock.jpg, images/creative/death-to-stock-1.jpg, images/creative/death-to-stock-2.jpg, images/creative/death-to-stock-3.jpg" 
-                        data-caption="Death To Stock"
-                        data-desc="">
-                        <span class="client-name">Death To Stock</span><span class="client-year">2025</span><span class="client-role">Studio Loba</span>
-                    </li>
-                    <li class="client-item" 
-                        data-img="images/creative/auto-trader.jpg" 
-                        data-images="images/creative/auto-trader.jpg, images/creative/auto-trader-1.jpg, images/creative/auto-trader-2.jpg, images/creative/auto-trader-3.jpg" 
-                        data-caption="AutoTrader"
-                        data-desc="">
-                        <span class="client-name">AutoTrader</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
-                    </li>
-                    <li class="client-item" 
-                        data-img="images/creative/ii.jpg" 
-                        data-images="images/creative/ii.jpg, images/creative/ii-1.jpg, images/creative/ii-2.jpg, images/creative/ii-3.jpg" 
-                        data-caption="Interactive Investor"
-                        data-desc="">
-                        <span class="client-name">Interactive Investor</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
-                    </li>
-                    <li class="client-item" 
-                        data-img="images/creative/sana-jardin-creative.jpg" 
-                        data-images="images/creative/sana-jardin-creative.jpg, images/creative/sana-jardin-creative-1.jpg, images/creative/sana-jardin-creative-2.jpg, images/creative/sana-jardin-creative-3.jpg" 
-                        data-caption="Sana Jardin"
-                        data-desc="">
-                        <span class="client-name">Sana Jardin</span><span class="client-year">2023</span><span class="client-role">Freelance</span>
-                    </li>
-                    <li class="client-item" 
-                        data-img="images/creative/the-guardian-200-years.jpg" 
-                        data-images="images/creative/the-guardian-200-years.jpg, images/creative/the-guardian-200-years-1.jpg, images/creative/the-guardian-200-years-2.jpg, images/creative/the-guardian-200-years-3.jpg" 
-                        data-caption="200 Years of The Guardian"
-                        data-desc="">
-                        <span class="client-name">200 Years of The Guardian</span><span class="client-year">2019</span><span class="client-role">The Guardian</span>
-                    </li>
-                    <li class="client-item" 
-                        data-img="images/creative/today-in-focus.jpg" 
-                        data-images="images/creative/today-in-focus.jpg, images/creative/today-in-focus-1.jpg, images/creative/today-in-focus-2.jpg, images/creative/today-in-focus-3.jpg" 
-                        data-caption="The Guardian Today In Focus"
-                        data-desc="">
-                        <span class="client-name">The Guardian Today In Focus</span><span class="client-year">2018</span><span class="client-role">The Guardian</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="list-group">
                 <div class="letter">Website & Digital</div>
                 <ul class="clients">
                     <li class="client-item" 
@@ -793,6 +811,7 @@
                     </li>
                 </ul>
             </div>
+            <footer><small>© All rights reserved. 2026.</small></footer>
         </nav>
 
         <main class="center-stage" id="center-stage">
