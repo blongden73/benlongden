@@ -19,7 +19,7 @@
             padding: 0;
         }
 
-        body {
+        html, body {
             font-family: var(--font-stack);
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -30,6 +30,7 @@
             overflow-y: auto;
             -ms-overflow-style: none;
             scrollbar-width: none;
+            position: relative;
         }
 
         body::-webkit-scrollbar { 
@@ -69,11 +70,11 @@
           text-shadow: 0 2px 10px rgba(0,0,0,0.5); 
           display: flex;
           gap: 63px;
-          pointer-events: none; /* Let clicks pass through header background */
+          pointer-events: none; 
         }
         
         header .logo {
-            pointer-events: auto; /* Keep text clickable if you ever make them links */
+            pointer-events: auto; 
         }
 
         /* Sidebar List */
@@ -113,6 +114,7 @@
             grid-template-columns: 1fr 60px 120px;
             gap: 0 30px;
             align-items: baseline;
+            position: relative;
         }
 
         .client-item:hover, .client-item.active-item {
@@ -141,13 +143,11 @@
             z-index: 5;
             background-color: transparent; 
             transition: background-color 0.4s ease;
-            /* Key change: keep the wrapper pass-through, only make children clickable */
             pointer-events: none; 
         }
 
         .center-stage.is-active {
             background-color: var(--bg-color); 
-            /* We want the transparent area to be clickable to close, so we enable it here */
             pointer-events: auto; 
         }
 
@@ -162,7 +162,6 @@
             cursor: default;
         }
 
-        /* When active, show a pointer cursor in the empty space to indicate it can be clicked to close */
         .center-stage.is-active .scroll-area {
             align-items: flex-start;
             cursor: pointer; 
@@ -205,12 +204,12 @@
             align-items: flex-start;
             margin: auto;
             position: relative;
-            cursor: auto; /* Reset cursor inside the content area */
-            pointer-events: none; /* Let hover previews pass through */
+            cursor: auto; 
+            pointer-events: none; 
         }
         
         .center-stage.is-active .content-wrapper {
-            pointer-events: auto; /* Re-enable clicking inside the content */
+            pointer-events: auto; 
         }
 
         .description-grid {
@@ -327,6 +326,13 @@
         .dot.active { background: #fff; }
 
         /* ---------------------------------------
+           MOBILE ELEMENTS (Hidden on Desktop)
+           --------------------------------------- */
+        .mobile-hero-media {
+            display: none;
+        }
+
+        /* ---------------------------------------
            MOBILE ACCORDION SPECIFIC
            --------------------------------------- */
         .mobile-accordion-wrapper {
@@ -378,17 +384,28 @@
            MOBILE RESPONSIVE BREAKPOINT
            --------------------------------------- */
         @media (max-width: 1024px) {
+            html, body {
+                height: auto !important;
+                overflow-x: hidden;
+                overflow-y: auto !important;
+            }
             .container { 
                 flex-direction: column; 
                 display: block; 
+                height: auto !important;
             }
             header { 
                 background: rgba(0,0,0,0.8); 
                 backdrop-filter: blur(5px); 
             }
+            /* HIDE BG REEL ON MOBILE */
+            .bg-reel {
+                display: none !important;
+            }
             .sidebar { 
                 width: 100%; 
                 padding: 100px 20px 40px 20px; 
+                height: auto !important;
             }
             .center-stage { 
                 display: none !important; 
@@ -405,7 +422,20 @@
                 grid-template-columns: 1fr 45px 75px;
                 gap: 10px;
                 font-size: 0.9rem;
-                margin-bottom: 15px; 
+                margin-bottom: 25px; /* Spaced out slightly to accommodate images */
+            }
+
+            /* DISPLAY HERO MEDIA ON MOBILE */
+            .mobile-hero-media {
+                display: block;
+                grid-column: 1 / -1;
+                width: 100%;
+                height: auto;
+                max-height: 400px;
+                object-fit: cover;
+                border-radius: 4px;
+                margin-top: 12px;
+                pointer-events: none; /* Clicks pass through to the list item */
             }
         }
     </style>
@@ -834,11 +864,48 @@
             let currentIndex = 0;
             
             let isMobile = window.innerWidth <= 1024;
+
+            // --- INJECT MOBILE HERO MEDIA ---
+            function initMobileHeroMedia() {
+                if (!isMobile) return;
+                
+                listItems.forEach(item => {
+                    // Skip if already generated
+                    if (item.querySelector('.mobile-hero-media')) return;
+                    
+                    const imgSrc = item.getAttribute('data-img');
+                    const videoSrc = item.getAttribute('data-video');
+                    
+                    let mediaEl;
+                    if (imgSrc) {
+                        mediaEl = document.createElement('img');
+                        mediaEl.src = imgSrc;
+                        mediaEl.loading = 'lazy';
+                    } else if (videoSrc) {
+                        mediaEl = document.createElement('video');
+                        mediaEl.src = videoSrc;
+                        mediaEl.muted = true;
+                        mediaEl.loop = true;
+                        mediaEl.playsInline = true;
+                        mediaEl.autoplay = true; 
+                    }
+                    
+                    if (mediaEl) {
+                        mediaEl.className = 'mobile-hero-media';
+                        item.appendChild(mediaEl);
+                    }
+                });
+            }
+
+            // Run once on load
+            initMobileHeroMedia();
+
             window.addEventListener('resize', () => {
                 const newlyMobile = window.innerWidth <= 1024;
                 if (newlyMobile !== isMobile) {
                     isMobile = newlyMobile;
                     closeActiveProject(); 
+                    if (isMobile) initMobileHeroMedia();
                 }
             });
 
@@ -994,8 +1061,6 @@
                 if (!wasActive) {
                     item.classList.add('active-item');
                     activeProject = item;
-                    
-                    if (bgReel) bgReel.style.opacity = '0'; 
 
                     let accordion = item.querySelector('.mobile-accordion-wrapper');
                     
@@ -1014,22 +1079,15 @@
                             inner.appendChild(descDiv);
                         }
 
+                        // If it's an image project, skip the first image because it's already displayed above the accordion
+                        const imagesAttr = item.getAttribute('data-images');
                         const videoSrc = item.getAttribute('data-video');
-                        if (videoSrc) {
-                            const vid = document.createElement('video');
-                            vid.src = videoSrc;
-                            vid.muted = true;
-                            vid.loop = true;
-                            vid.playsInline = true;
-                            vid.autoplay = true;
-                            vid.controls = true; 
-                            inner.appendChild(vid);
-                        }
-                        
-                        const imagesAttr = item.getAttribute('data-images') || item.getAttribute('data-img');
+
                         if (imagesAttr && !videoSrc) {
                             const images = imagesAttr.split(',').map(s => s.trim());
-                            images.forEach(src => {
+                            
+                            // .slice(1) skips the very first image so we don't repeat the hero thumbnail
+                            images.slice(1).forEach(src => {
                                 const img = document.createElement('img');
                                 img.src = src;
                                 img.loading = "lazy";
@@ -1085,7 +1143,11 @@
                 });
 
                 item.addEventListener('click', (e) => {
-                    if (e.target.closest('.mobile-accordion-wrapper')) return;
+                    // Prevent closing if tapping on elements inside the accordion
+                    if (e.target.closest('.mobile-accordion-wrapper') || e.target.closest('.mobile-hero-media')) {
+                        // Allow natural click on media (e.g., video play/pause)
+                        if (e.target.tagName !== 'VIDEO') return;
+                    }
 
                     if (isMobile) {
                         handleMobileClick(item);
