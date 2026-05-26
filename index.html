@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- HTML Meta Tags -->
     <title>Ben Longden - Creative Direction - Design</title>
     <meta name="description" content="Creative Director & Designer with more than 15 years of experience partnering with brands to craft compelling stories, distinctive identities, and culturally resonant visual worlds across fashion, lifestyle, and luxury sectors. Skilled across both concept and execution, from brand strategy and creative direction through to design, motion, and content production.  Available to work : projects@benlongdendesign.co.uk">
 
-    <!-- Facebook Meta Tags -->
     <meta property="og:url" content="https://benlongdendesign.co.uk/">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Ben Longden - Creative Direction - Design">
     <meta property="og:description" content="Creative Director & Designer with more than 15 years of experience partnering with brands to craft compelling stories, distinctive identities, and culturally resonant visual worlds across fashion, lifestyle, and luxury sectors. Skilled across both concept and execution, from brand strategy and creative direction through to design, motion, and content production.  Available to work : projects@benlongdendesign.co.uk">
     <meta property="og:image" content="/og-image.jpg">
 
-    <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="benlongdendesign.co.uk">
     <meta property="twitter:url" content="https://benlongdendesign.co.uk/">
@@ -22,9 +19,6 @@
     <meta name="twitter:description" content="Creative Director & Designer with more than 15 years of experience partnering with brands to craft compelling stories, distinctive identities, and culturally resonant visual worlds across fashion, lifestyle, and luxury sectors. Skilled across both concept and execution, from brand strategy and creative direction through to design, motion, and content production.  Available to work : projects@benlongdendesign.co.uk">
     <meta name="twitter:image" content="/og-image.jpg">
 
-    <!-- Meta Tags Generated via https://www.opengraph.xyz -->
-
-    <!-- NOTE: You selected a new image. Please upload it to your server and replace "/og-image.jpg" with the actual URL. -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -51,8 +45,7 @@
             line-height: 1.4;
             font-size: 16px;
             -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-            overflow-y: auto;
+            overflow-x: clip; /* Stops horizontal drift, allows vertical native scroll */
             -ms-overflow-style: none;
             scrollbar-width: none;
             position: relative;
@@ -80,7 +73,7 @@
         .container {
             display: flex;
             min-height: 100vh;
-            width: 100vw;
+            width: 100%;
             position: relative;
             z-index: 10; 
         }
@@ -104,11 +97,13 @@
 
         footer {
             margin-top: 60px;
+            padding-bottom: 40px;
         }
 
         .description h1 {
             font-size: 16px;
             line-height: 1.4;
+            font-weight: normal;
         }
 
         /* Sidebar List */
@@ -148,7 +143,7 @@
             display: grid;
             grid-template-columns: 1fr 60px 120px;
             gap: 0 30px;
-            align-items: baseline;
+            align-items: start; 
             position: relative;
         }
 
@@ -452,19 +447,19 @@
             }
             .letter {
                 width: 100%;
-                margin-bottom: 65px;
+                margin-bottom: 30px; /* Reduced from 65px for better flow */
                 font-size: 0.75rem;
             }
             .client-item {
                 grid-template-columns: 1fr 45px 96px;
                 gap: 10px;
                 font-size: 0.9rem;
-                margin-bottom: 25px; 
+                margin-bottom: 35px; /* Added spacing to separate items visually */
             }
 
             .client-role { text-align: right; }
 
-            /* DISPLAY HERO MEDIA ON MOBILE */
+            /* DISPLAY HERO MEDIA ON MOBILE - OPACITY FADE COMPLETELY REMOVED */
             .mobile-hero-media {
                 display: block;
                 grid-column: 1 / -1;
@@ -475,12 +470,6 @@
                 border-radius: 4px;
                 margin-top: 12px;
                 pointer-events: none; 
-                opacity: 0; /* Starts hidden, script fades it in */
-                transition: opacity 0.6s ease;
-            }
-            
-            .mobile-hero-media.loaded {
-                opacity: 1; /* Applied when fully loaded via JS */
             }
         }
     </style>
@@ -494,8 +483,9 @@
     <div class="container">
         <nav class="sidebar">
             <div class="description"><h1>Creative Director & Designer with more than 15 years of experience partnering with brands to craft compelling stories, distinctive identities, and culturally resonant visual worlds across fashion, lifestyle, and luxury sectors. Skilled across both concept and execution, from brand strategy and creative direction through to design, motion, and content production. </h1> <br/> Available to work : projects@benlongdendesign.co.uk </div>
+            
             <div class="list-group">
-                <div class="letter">Art Direction & Creative</div>
+                <div class="letter">Art Direction & Creative</div>
                 <ul class="clients">
                     <li class="client-item" 
                         data-img="images/creative/old-spice.jpg" 
@@ -548,6 +538,7 @@
                     </li>
                 </ul>
             </div>
+            
             <div class="list-group">
                 <div class="letter">Branding & Design</div>
                 <ul class="clients">
@@ -555,7 +546,7 @@
                         data-img="images/design/messina-hembry.jpg" 
                         data-images="images/design/messina-hembry.jpg, images/design/messina-1.jpg, images/design/messina-2.jpg, images/design/messina-3.jpg" 
                         data-caption="Messina Hembry"
-                        data-desc="I lead the brand design and art direction for Messina Hembry alongside Emily Clay of Clay Studio. We worked closely to craft an new identity, and art direction for the Messina brand that spoke to the power of how they are reshaping the fashion industry. ">
+                        data-desc="Brand identity and digital platform redesign for Messina Hembry.<br><br>We focused on sustainable fashion and modernising their digital footprint to appeal to a younger demographic. Deliverables included brand guidelines, website UI, and packaging design.">
                         <span class="client-name">Messina Hembry</span><span class="client-year">2025</span><span class="client-role">Freelance</span>
                     </li>
                     <li class="client-item" 
@@ -797,37 +788,37 @@
                     <li class="client-item" 
                         data-video="images/video/Old Spice - Chip - Big Man Ting - Online - 13.mp4" 
                         data-caption="Old Spice - Big Man Ting"
-                        data-desc="Creative Direction & design for Old Spice's first major campaign in the UK. The idea was to create a song that disses those who smell bad and quite possibly those who use those little black cans of Lynx. We worked with grime legend CHIP known for his diss tracks and created a song, and we promoted a song, and we did it in an authentic way that would resonate with the audience. Big Man Ting.">
+                        data-desc="Description for this animation project will go here. You can add extra details or links as needed.">
                         <span class="client-name">Old Spice</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
                     </li>
                     <li class="client-item" 
                         data-video="images/video/RCP_BRAND_FILM 151025.mp4" 
                         data-caption="RCP LDN - We Love Advertising"
-                        data-desc="As Design Director at RCP I helped reposition the agency from RECIPE to RCP LDN alongside a organisation rethink and repositioning.">
+                        data-desc="Description for this animation project will go here. You can add extra details or links as needed.">
                         <span class="client-name">RCP LDN</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
                     </li>
                     <li class="client-item" 
                         data-video="images/video/AT_PARKING_NOT_PARKING_15_V08.mp4" 
                         data-caption="Autotrader - Parking"
-                        data-desc="Campaign and brand update for AutoTrader. We were asked to help AutoTrader move away from the historic image that it is a magazine for cars and shift them to what is closer to the reality: a tech company and the largest marketplace for buying cars in the UK. The idea is Found AT. A platform that is flexible to future campaigns and builds on the brand equity that AutoTrader has in the UK.">
+                        data-desc="Description for this animation project will go here.">
                         <span class="client-name">AutoTrader</span><span class="client-year">2025</span><span class="client-role">RCP LDN</span>
                     </li>
                     <li class="client-item" 
                         data-video="images/video/Sana jardin_Main_Final.mp4" 
                         data-caption="Sana Jardin - The Alchemy of Energy"
-                        data-desc="I directed the launch of the rebrand and new brand positioning for Sana Jardin: The Alchemy of Energy, and the power of petals. This brand positioning bridges the gap between the businesses’ goal to support the flower harvesters, and the aromatherapeutic benefits of the fragrances themselves.">
+                        data-desc="Description for this animation project will go here.">
                         <span class="client-name">Sana Jardin</span><span class="client-year">2024</span><span class="client-role">Freelance</span>
                     </li>
                     <li class="client-item" 
                         data-video="images/video/dts_-_drop_the_trend_v1 (1080p).mp4" 
                         data-caption="Death To Stock - Drop The Trend"
-                        data-desc="For more than 6 years I have been working alongside Death To Stock to produce photographic and video content for their platform. As creative director and producer on more than 15 packs I have delivered industry leading imagery that have been used by some of the world's leading brands.">
+                        data-desc="Description for this animation project will go here.">
                         <span class="client-name">Death To Stock</span><span class="client-year">2023</span><span class="client-role">Studio Loba</span>
                     </li>
                     <li class="client-item" 
                         data-video="images/video/iris_update_5.mp4" 
                         data-caption="Iris Ventures - Brands Launch"
-                        data-desc="We worked with Iris Ventures to create a new website that helped them relaunch their brand to the market and increase their ability to attract high end and luxury brands to their portfolio.">
+                        data-desc="Description for this animation project will go here.">
                         <span class="client-name">Iris Ventures</span><span class="client-year">2023</span><span class="client-role">Studio Loba</span>
                     </li>
                 </ul>
@@ -918,7 +909,7 @@
                 if (!isMobile) return;
 
                 // 1. Setup intersection observer for elements below the fold
-                if (!mobileObserver) {
+                if (!mobileObserver && window.IntersectionObserver) {
                     mobileObserver = new IntersectionObserver((entries, observer) => {
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
@@ -960,8 +951,6 @@
                     
                     if (mediaEl) {
                         mediaEl.className = 'mobile-hero-media';
-                        mediaEl.onload = () => mediaEl.classList.add('loaded');
-                        mediaEl.oncanplay = () => mediaEl.classList.add('loaded');
                         item.appendChild(mediaEl);
                     }
                 }
@@ -974,11 +963,14 @@
                     
                     const rect = item.getBoundingClientRect();
                     
-                    // If the item is currently on screen or within a safety buffer (1.5x screen height)
-                    if (rect.top > 0 && rect.top < windowHeight * 1.5) {
+                    // If the item is currently on screen or within a safety buffer
+                    if (rect.top >= -1000 && rect.top <= windowHeight * 1.5) {
                         injectHeroMedia(item, true); // Inject IMMEDIATELY with high priority
-                    } else {
+                    } else if (mobileObserver) {
                         mobileObserver.observe(item); // Defer to the observer
+                    } else {
+                        // Fallback if IntersectionObserver is somehow not supported
+                        injectHeroMedia(item, false); 
                     }
                 });
             }
@@ -1191,7 +1183,7 @@
                     setTimeout(() => {
                         const headerOffset = 90;
                         const elementPosition = item.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        const offsetPosition = elementPosition + window.scrollY - headerOffset;
                         window.scrollTo({
                              top: offsetPosition,
                              behavior: "smooth"
