@@ -877,56 +877,68 @@
             function initMobileHeroMedia() {
                 if (!isMobile) return;
 
-                // Setup intersection observer so we only load media when the user scrolls near it
+                // 1. Setup intersection observer for elements below the fold
                 if (!mobileObserver) {
                     mobileObserver = new IntersectionObserver((entries, observer) => {
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
-                                const item = entry.target;
-                                
-                                // Only inject if it hasn't been added yet
-                                if (!item.querySelector('.mobile-hero-media')) {
-                                    const imgSrc = item.getAttribute('data-img');
-                                    const videoSrc = item.getAttribute('data-video');
-                                    
-                                    let mediaEl;
-                                    if (imgSrc) {
-                                        mediaEl = document.createElement('img');
-                                        mediaEl.src = imgSrc;
-                                    } else if (videoSrc) {
-                                        mediaEl = document.createElement('video');
-                                        mediaEl.src = videoSrc;
-                                        mediaEl.muted = true;
-                                        mediaEl.loop = true;
-                                        mediaEl.playsInline = true;
-                                        mediaEl.autoplay = true; 
-                                    }
-                                    
-                                    if (mediaEl) {
-                                        mediaEl.className = 'mobile-hero-media';
-                                        
-                                        // Fade it in once it loads to prevent pop-in jitter
-                                        mediaEl.onload = () => mediaEl.classList.add('loaded');
-                                        mediaEl.oncanplay = () => mediaEl.classList.add('loaded');
-                                        
-                                        item.appendChild(mediaEl);
-                                    }
-                                }
-                                
-                                // Stop observing this item to save memory
-                                observer.unobserve(item);
+                                injectHeroMedia(entry.target, false); // Lazy load
+                                observer.unobserve(entry.target);
                             }
                         });
                     }, {
-                        // Load items slightly before they enter the screen for a seamless experience
-                        rootMargin: '400px 0px' 
+                        // Increased margin: loads items 600px before they scroll into view
+                        rootMargin: '600px 0px' 
                     });
                 }
 
-                // Attach the observer to all items
+                // 2. Helper function to create and inject the media element
+                function injectHeroMedia(item, isPriority) {
+                    if (item.querySelector('.mobile-hero-media')) return;
+
+                    const imgSrc = item.getAttribute('data-img');
+                    const videoSrc = item.getAttribute('data-video');
+                    
+                    let mediaEl;
+                    if (imgSrc) {
+                        mediaEl = document.createElement('img');
+                        mediaEl.src = imgSrc;
+                        if (isPriority) {
+                            mediaEl.fetchPriority = 'high'; // Prioritize above-the-fold
+                            mediaEl.loading = 'eager';
+                        } else {
+                            mediaEl.loading = 'lazy'; // Native lazy loading for others
+                        }
+                    } else if (videoSrc) {
+                        mediaEl = document.createElement('video');
+                        mediaEl.src = videoSrc;
+                        mediaEl.muted = true;
+                        mediaEl.loop = true;
+                        mediaEl.playsInline = true;
+                        mediaEl.autoplay = true; 
+                    }
+                    
+                    if (mediaEl) {
+                        mediaEl.className = 'mobile-hero-media';
+                        mediaEl.onload = () => mediaEl.classList.add('loaded');
+                        mediaEl.oncanplay = () => mediaEl.classList.add('loaded');
+                        item.appendChild(mediaEl);
+                    }
+                }
+
+                // 3. Evaluate all items immediately on load
+                const windowHeight = window.innerHeight;
+                
                 listItems.forEach(item => {
-                    if (!item.querySelector('.mobile-hero-media')) {
-                        mobileObserver.observe(item);
+                    if (item.querySelector('.mobile-hero-media')) return; // skip if already built
+                    
+                    const rect = item.getBoundingClientRect();
+                    
+                    // If the item is currently on screen or within a safety buffer (1.5x screen height)
+                    if (rect.top > 0 && rect.top < windowHeight * 1.5) {
+                        injectHeroMedia(item, true); // Inject IMMEDIATELY with high priority
+                    } else {
+                        mobileObserver.observe(item); // Defer to the observer
                     }
                 });
             }
