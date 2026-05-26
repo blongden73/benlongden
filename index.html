@@ -422,7 +422,7 @@
                 grid-template-columns: 1fr 45px 75px;
                 gap: 10px;
                 font-size: 0.9rem;
-                margin-bottom: 25px; /* Spaced out slightly to accommodate images */
+                margin-bottom: 25px; 
             }
 
             /* DISPLAY HERO MEDIA ON MOBILE */
@@ -435,7 +435,13 @@
                 object-fit: cover;
                 border-radius: 4px;
                 margin-top: 12px;
-                pointer-events: none; /* Clicks pass through to the list item */
+                pointer-events: none; 
+                opacity: 0; /* Starts hidden, script fades it in */
+                transition: opacity 0.6s ease;
+            }
+            
+            .mobile-hero-media.loaded {
+                opacity: 1; /* Applied when fully loaded via JS */
             }
         }
     </style>
@@ -865,34 +871,62 @@
             
             let isMobile = window.innerWidth <= 1024;
 
-            // --- INJECT MOBILE HERO MEDIA ---
+            // --- OPTIMIZED MOBILE HERO MEDIA LAZY LOADER ---
+            let mobileObserver;
+
             function initMobileHeroMedia() {
                 if (!isMobile) return;
-                
+
+                // Setup intersection observer so we only load media when the user scrolls near it
+                if (!mobileObserver) {
+                    mobileObserver = new IntersectionObserver((entries, observer) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const item = entry.target;
+                                
+                                // Only inject if it hasn't been added yet
+                                if (!item.querySelector('.mobile-hero-media')) {
+                                    const imgSrc = item.getAttribute('data-img');
+                                    const videoSrc = item.getAttribute('data-video');
+                                    
+                                    let mediaEl;
+                                    if (imgSrc) {
+                                        mediaEl = document.createElement('img');
+                                        mediaEl.src = imgSrc;
+                                    } else if (videoSrc) {
+                                        mediaEl = document.createElement('video');
+                                        mediaEl.src = videoSrc;
+                                        mediaEl.muted = true;
+                                        mediaEl.loop = true;
+                                        mediaEl.playsInline = true;
+                                        mediaEl.autoplay = true; 
+                                    }
+                                    
+                                    if (mediaEl) {
+                                        mediaEl.className = 'mobile-hero-media';
+                                        
+                                        // Fade it in once it loads to prevent pop-in jitter
+                                        mediaEl.onload = () => mediaEl.classList.add('loaded');
+                                        mediaEl.oncanplay = () => mediaEl.classList.add('loaded');
+                                        
+                                        item.appendChild(mediaEl);
+                                    }
+                                }
+                                
+                                // Stop observing this item to save memory
+                                observer.unobserve(item);
+                            }
+                        });
+                    }, {
+                        // Load items slightly before they enter the screen for a seamless experience
+                        rootMargin: '400px 0px' 
+                    });
+                }
+
+                // Attach the observer to all items
                 listItems.forEach(item => {
-                    // Skip if already generated
-                    if (item.querySelector('.mobile-hero-media')) return;
-                    
-                    const imgSrc = item.getAttribute('data-img');
-                    const videoSrc = item.getAttribute('data-video');
-                    
-                    let mediaEl;
-                    if (imgSrc) {
-                        mediaEl = document.createElement('img');
-                        mediaEl.src = imgSrc;
-                        mediaEl.loading = 'lazy';
-                    } else if (videoSrc) {
-                        mediaEl = document.createElement('video');
-                        mediaEl.src = videoSrc;
-                        mediaEl.muted = true;
-                        mediaEl.loop = true;
-                        mediaEl.playsInline = true;
-                        mediaEl.autoplay = true; 
-                    }
-                    
-                    if (mediaEl) {
-                        mediaEl.className = 'mobile-hero-media';
-                        item.appendChild(mediaEl);
+                    if (!item.querySelector('.mobile-hero-media')) {
+                        mobileObserver.observe(item);
                     }
                 });
             }
@@ -1162,8 +1196,10 @@
             });
         });
 
-        // --- PRELOADER: SAFE NETWORK FETCH ---
+        // --- PRELOADER: SAFE NETWORK FETCH (Desktop Only) ---
         window.addEventListener('load', () => {
+            if (window.innerWidth <= 1024) return; // Keep mobile bandwidth light
+
             const listItems = document.querySelectorAll('.client-item');
             const videoSources = new Set();
             
