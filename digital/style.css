@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: #000;
+  }
+  
+  /* Flexbox masonry layout */
+  .masonry-layout {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Columns flex styling */
+  .column {
+    flex: 1;
+    min-width: 0; /* Ensures images/videos do not overflow flex container */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  /* Individual Card Items */
+  .masonry-item {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  /* Responsive Media */
+  .masonry-item img, 
+  .masonry-item video {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  
+  /* Text Container */
+  .masonry-content {
+    padding: 16px;
+  }
+  
+  .masonry-title {
+    margin: 0 0 8px 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .masonry-desc {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
+  }
+  
+  /* Loading Indicator */
+  .loading {
+    text-align: center;
+    padding: 20px;
+    color: #555;
+  }
+  
+  /* Mobile responsive collapse to 1 column */
+  @media (max-width: 500px) {
+    .masonry-layout {
+      flex-direction: column;
+    }
+  }
